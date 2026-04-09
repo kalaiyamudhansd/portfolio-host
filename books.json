@@ -1,0 +1,20 @@
+{
+  "books": [
+    {
+      "id": "sigarangal",
+      "titleTa": "சிகரங்கள் உயரமல்ல",
+      "authorTa": "முனைவர் S.D. கலையமுதன் M.A., M.L., PhD.,",
+      "descriptionEn": "A motivational masterpiece exploring the heights of human potential through Tamil wisdom.",
+      "coverUrl": "books/1.jpg",
+      "driveUrl": "https://drive.google.com"
+    },
+    {
+      "id": "muyarchi",
+      "titleTa": "முயற்சி எனும் அம்புறாத்தூணி",
+      "authorTa": "முனைவர் S.D. கலையமுதன் M.A., M.L., PhD.,",
+      "descriptionEn": "A profound work on the power of perseverance as the quiver of life's arrows.",
+      "coverUrl": "books/2.jpeg",
+      "driveUrl": "https://drive.google.com"
+    }
+  ]
+}

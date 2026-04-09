@@ -1,0 +1,10 @@
+node_modules/
+
+# Local secrets — copy from .env.example
+.env
+
+# Generated at Vercel build / local `./build.sh` — do not commit secrets
+config.js
+node_modules/
+config.js
+.env

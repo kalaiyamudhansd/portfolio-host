@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin Panel — Sigaram Foundation</title>
+  <script src="/config.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0F0A1E; color: #F0EBFF; }
+
+    /* LOGIN */
+    #login-screen {
+      min-height: 100vh; display: flex; align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1A0A2E 0%, #6B21A8 100%);
+    }
+    #login-card {
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px; padding: 48px 40px;
+      width: 100%; max-width: 400px; text-align: center;
+    }
+    #login-card img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #D4AF37; margin-bottom: 16px; }
+    #login-card h1 { color: #D4AF37; font-size: 1.5rem; margin-bottom: 4px; }
+    #login-card p { color: #A89BC2; font-size: 0.9rem; margin-bottom: 32px; }
+    .password-wrap { position: relative; margin-bottom: 12px; }
+    .password-wrap input {
+      width: 100%; padding: 14px 48px 14px 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px; color: #F0EBFF; font-size: 1rem;
+    }
+    .password-wrap input:focus { outline: none; border-color: #6B21A8; box-shadow: 0 0 0 3px rgba(107,33,168,0.3); }
+    .eye-btn { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.1rem; }
+    #login-error { color: #F87171; font-size: 0.85rem; min-height: 20px; margin-bottom: 12px; }
+    .btn-login { width: 100%; padding: 14px; background: linear-gradient(135deg, #D4AF37, #B8960C); color: #1A0A2E; font-weight: 700; font-size: 1rem; border: none; border-radius: 12px; cursor: pointer; transition: transform 0.2s; }
+    .btn-login:hover { transform: translateY(-2px); }
+    @keyframes shake {
+      0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-10px)} 40%,80%{transform:translateX(10px)}
+    }
+    .shake { animation: shake 0.5s ease; }
+
+    /* TOPBAR */
+    .topbar {
+      background: #1A0A2E; padding: 12px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid #2E2050;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 1rem; }
+    .topbar-logo { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+    .topbar-right { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .btn-outline { padding: 8px 16px; border: 1px solid #6B21A8; color: #A89BC2; background: none; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.85rem; transition: all 0.2s; display: inline-flex; align-items: center; }
+    .btn-outline:hover { background: #6B21A8; color: white; }
+    .btn-danger { padding: 8px 16px; background: #7F1D1D; color: #FEE2E2; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+
+    /* STATS BAR */
+    .stats-bar { display: flex; gap: 16px; padding: 20px 24px; background: #150D28; border-bottom: 1px solid #2E2050; flex-wrap: wrap; }
+    .stat-card { background: #1E1535; border: 1px solid #2E2050; border-radius: 12px; padding: 16px 24px; flex: 1; min-width: 120px; text-align: center; }
+    .stat-num { font-size: 2rem; font-weight: 700; color: #D4AF37; }
+    .stat-label { font-size: 0.75rem; color: #A89BC2; margin-top: 4px; }
+
+    /* DASHBOARD LAYOUT */
+    .dashboard-layout { display: flex; min-height: calc(100vh - 130px); }
+
+    /* SIDEBAR */
+    .sidebar { width: 220px; background: #150D28; border-right: 1px solid #2E2050; padding: 16px 12px; flex-shrink: 0; }
+    .sidebar-btn {
+      width: 100%; padding: 12px 16px; margin-bottom: 6px;
+      background: none; border: none; border-radius: 10px;
+      color: #A89BC2; font-size: 0.9rem; cursor: pointer;
+      text-align: left; transition: all 0.2s;
+    }
+    .sidebar-btn:hover { background: rgba(107,33,168,0.2); color: #F0EBFF; }
+    .sidebar-btn.active { background: #D4AF37; color: #1A0A2E; font-weight: 600; }
+
+    /* CONTENT */
+    .content-area { flex: 1; padding: 24px; overflow-y: auto; }
+    #category-heading { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; color: #F0EBFF; }
+
+    .info-banner {
+      background: #78350F; color: #FEF3C7;
+      padding: 12px 16px; border-radius: 10px;
+      margin-bottom: 16px; font-size: 0.85rem;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    }
+    .info-banner button { background: none; border: none; color: #FEF3C7; cursor: pointer; font-size: 1.1rem; flex-shrink: 0; }
+    .info-banner code { background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; }
+
+    .api-error-banner {
+      background: #7f1d1d; color: #fecaca;
+      padding: 12px 16px; border-radius: 10px;
+      margin-bottom: 16px; font-size: 0.85rem;
+      display: none; justify-content: space-between; align-items: flex-start; gap: 12px;
+    }
+    .api-error-banner code { background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 4px; }
+    .api-error-banner button { background: none; border: none; color: #fecaca; cursor: pointer; font-size: 1.1rem; flex-shrink: 0; }
+
+    /* UPLOAD ZONE */
+    .upload-zone {
+      border: 2px dashed #6B21A8; border-radius: 16px;
+      padding: 48px 24px; text-align: center; cursor: pointer;
+      transition: all 0.3s; background: rgba(107,33,168,0.05); margin-bottom: 16px;
+    }
+    .upload-zone:hover, .upload-zone.dragover { border-color: #D4AF37; background: rgba(212,175,55,0.08); }
+    .upload-icon { font-size: 3rem; margin-bottom: 12px; }
+    .upload-title { font-size: 1.1rem; font-weight: 600; color: #F0EBFF; margin-bottom: 6px; }
+    .upload-sub { font-size: 0.85rem; color: #A89BC2; }
+
+    /* FILE QUEUE */
+    .file-queue { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+    .queue-item {
+      display: flex; align-items: center; gap: 12px;
+      background: #1E1535; border: 1px solid #2E2050;
+      border-radius: 12px; padding: 12px;
+    }
+    .queue-item img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+    .queue-info { flex: 1; min-width: 0; }
+    .queue-name { font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 2px; word-break: break-all; }
+    .queue-size { font-size: 0.75rem; color: #A89BC2; display: block; margin-bottom: 6px; }
+    .queue-status { font-size: 0.75rem; color: #A89BC2; }
+    .queue-remove { background: none; border: none; color: #F87171; cursor: pointer; font-size: 1.1rem; flex-shrink: 0; }
+    .progress-bar { height: 4px; background: #2E2050; border-radius: 99px; overflow: hidden; margin-bottom: 4px; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #6B21A8, #D4AF37); border-radius: 99px; transition: width 0.3s; }
+    .btn-gold { width: 100%; padding: 14px; background: linear-gradient(135deg, #D4AF37, #B8960C); color: #1A0A2E; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; font-size: 1rem; margin-bottom: 24px; transition: transform 0.2s; }
+    .btn-gold:hover { transform: translateY(-2px); }
+    .btn-gold:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* IMAGE GRID */
+    .image-grid-cards { display: contents; }
+    .image-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .image-card { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 4/3; background: #1E1535; }
+    .image-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .image-overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,0.75);
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 10px; opacity: 0; transition: opacity 0.3s;
+      padding: 12px;
+    }
+    .image-card:hover .image-overlay { opacity: 1; }
+    .image-filename { font-size: 0.75rem; color: #E2D9F3; text-align: center; word-break: break-all; }
+    .image-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .btn-small { padding: 6px 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.75rem; font-weight: 600; }
+    .btn-copy { background: #6B21A8; color: white; }
+    .btn-delete { background: #7F1D1D; color: #FEE2E2; }
+    .drag-handle { position: absolute; top: 8px; left: 8px; color: white; background: rgba(0,0,0,0.55); border-radius: 4px; padding: 4px 6px; opacity: 0.9; cursor: grab; z-index: 2; font-size: 14px; line-height: 1; user-select: none; }
+    .drag-handle:active { cursor: grabbing; }
+    .image-card.is-dragging { opacity: 0.45; outline: 2px dashed #D4AF37; }
+    .order-hint { font-size: 13px; color: #A89BC2; margin: 0 0 10px; line-height: 1.55; max-width: 640px; }
+    .order-save-row { margin-bottom: 18px; display: none; flex-wrap: wrap; align-items: center; gap: 12px; }
+    .order-save-row.is-visible { display: flex; }
+    .btn-order-save { padding: 10px 18px; border-radius: 10px; border: 1px solid #D4AF37; background: rgba(212,175,55,0.15); color: #FEF3C7; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+    .btn-order-save:hover { background: rgba(212,175,55,0.28); }
+    .btn-order-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* EMPTY / LOADING STATES */
+    .empty-state { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #A89BC2; }
+    .empty-state.error { color: #F87171; }
+    .loading-spinner { grid-column: 1/-1; text-align: center; padding: 60px; color: #A89BC2; font-size: 1.1rem; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 24px; right: 24px; padding: 14px 20px; border-radius: 12px; font-weight: 600; font-size: 0.9rem; z-index: 9999; max-width: 360px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+    .toast-success { background: #065F46; color: #D1FAE5; }
+    .toast-warning { background: #78350F; color: #FEF3C7; }
+    .toast-error { background: #7F1D1D; color: #FEE2E2; }
+
+    /* BOTTOM TABS (mobile) */
+    .bottom-tabs { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #1A0A2E; border-top: 1px solid #2E2050; z-index: 50; }
+    .tab-btn { flex: 1; padding: 12px 4px; background: none; border: none; color: #A89BC2; font-size: 0.65rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 56px; }
+    .tab-btn.active { color: #D4AF37; }
+    .tab-icon { font-size: 1.3rem; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .bottom-tabs { display: flex; }
+      .content-area { padding: 16px 16px 88px; }
+      .image-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-bar { gap: 10px; padding: 12px 16px; }
+      .stat-card { padding: 12px; }
+      .stat-num { font-size: 1.5rem; }
+      #login-card { margin: 16px; padding: 32px 24px; }
+    }
+    @media (max-width: 420px) {
+      .image-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== LOGIN SCREEN ===== -->
+  <div id="login-screen">
+    <div id="login-card">
+      <img src="../logo.png" alt="Sigaram Foundation" />
+      <h1>Sigaram Admin</h1>
+      <p>Enter password to manage gallery images</p>
+      <div class="password-wrap">
+        <input type="password" id="password-input" placeholder="Password" autocomplete="current-password" aria-label="Password" />
+        <button type="button" class="eye-btn" id="eye-btn" aria-label="Show password">👁️</button>
+      </div>
+      <div id="login-error"></div>
+      <button type="button" class="btn-login" onclick="login()">Sign in</button>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD ===== -->
+  <div id="dashboard" style="display:none;">
+
+    <div class="topbar">
+      <div class="topbar-left">
+        <img src="../logo.png" alt="Logo" class="topbar-logo" />
+        <span>Sigaram Admin</span>
+      </div>
+      <div class="topbar-right">
+        <a href="books.html" class="btn-outline">📚 Books</a>
+        <a href="../index.html" target="_blank" rel="noopener noreferrer" class="btn-outline">🌐 View Site</a>
+        <button type="button" onclick="logout()" class="btn-danger">Logout</button>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-total">0</div>
+        <div class="stat-label">Total Images</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-pattimandram">0</div>
+        <div class="stat-label">Pattimandram</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-speech">0</div>
+        <div class="stat-label">Speeches</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-abroad">0</div>
+        <div class="stat-label">Abroad</div>
+      </div>
+    </div>
+
+    <div class="dashboard-layout">
+
+      <aside class="sidebar" id="sidebar" aria-label="Categories"></aside>
+
+      <main class="content-area">
+        <div class="info-banner" id="setup-banner">
+          <span><strong>⚙️ Setup:</strong> <code>.env</code> + <code>./build.sh</code> + Security → <strong>Resource list</strong> (do not block list URLs). This panel lists by <strong>tag</strong> (e.g. <code>sigaram_pattimandram</code>). <strong>Folders ≠ tags</strong>—images only in a folder need that tag in Cloudinary, or set <code>CLOUDINARY_API_KEY</code> + <code>CLOUDINARY_API_SECRET</code> on Vercel to fall back to folder listing. Uploads should attach tags automatically; if not, edit preset <code>sigaram_gallery</code> → allow <strong>tags</strong> from client.</span>
+          <button type="button" onclick="document.getElementById('setup-banner').remove()" aria-label="Dismiss">✕</button>
+        </div>
+
+        <div class="api-error-banner" id="api-missing-banner" role="alert">
+          <span><strong>Local API missing (404).</strong> Folder listing + delete need <code>/api/*</code>. Run <code>npm run dev</code> (not <code>dev:static</code> / live-server). If port <code>5173</code> is busy, the terminal shows another port — open Admin on <strong>that</strong> URL (e.g. <code>http://127.0.0.1:64716/admin/</code>), not an old tab on 5173. Or deploy to Vercel with the <code>api/</code> folder.</span>
+          <button type="button" onclick="document.getElementById('api-missing-banner').remove()" aria-label="Dismiss">✕</button>
+        </div>
+
+        <h2 id="category-heading">🎤 Pattimandram Shows</h2>
+
+        <div class="upload-zone" id="upload-zone">
+          <div class="upload-icon">☁️</div>
+          <p class="upload-title">Drag &amp; drop images here</p>
+          <p class="upload-sub">or click to browse — JPG, PNG, WebP — Max 10MB</p>
+          <input type="file" id="file-input" multiple accept="image/*" hidden />
+        </div>
+
+        <div id="file-queue" class="file-queue" style="display:none;"></div>
+        <button type="button" id="upload-btn" class="btn-gold" style="display:none;">Upload All Images</button>
+
+        <div class="order-save-row" id="order-save-row" aria-live="polite">
+          <p class="order-hint" id="order-hint">
+            <strong>Order:</strong> Drag the <span aria-hidden="true">⠿</span> handle on a photo to put first, second, etc. Then click <strong>Save photo order</strong> so the main site matches (requires <code style="background:rgba(0,0,0,.25);padding:2px 6px;border-radius:4px;">/api/gallery-order</code> — same as gallery: run <code style="background:rgba(0,0,0,.25);padding:2px 6px;border-radius:4px;">npm run dev</code> locally or deploy to Vercel).
+          </p>
+          <button type="button" class="btn-order-save" id="save-order-btn">💾 Save photo order</button>
+        </div>
+
+        <div id="image-grid" class="image-grid"></div>
+      </main>
+    </div>
+
+    <nav class="bottom-tabs" id="bottom-tabs" aria-label="Categories"></nav>
+  </div>
+
+  <div id="toast" class="toast toast-success" style="display:none;" role="status" aria-live="polite"></div>
+
+  <script>
+(function () {
+  'use strict';
+
+  const CONFIG = window.__SIGARAM_CONFIG__ || {};
+  const CLOUD_NAME = CONFIG.CLOUD_NAME || '';
+  const UPLOAD_PRESET = CONFIG.UPLOAD_PRESET || 'sigaram_gallery';
+  const ADMIN_PASSWORD = CONFIG.ADMIN_PASSWORD || '';
+
+  if (!CLOUD_NAME) {
+    console.warn('Cloudinary config not loaded. Check config.js and Vercel env vars.');
+  }
+
+  // folder = Media Library path; listTag = Cloudinary client list API is BY TAG (not folder).
+  // Uploads append tags so /image/list/<listTag>.json works. Preset must allow client-side tags (or add tags in preset).
+  const CATEGORIES = [
+    { key: 'pattimandram',        label: '🎤 Pattimandram Shows',   folder: 'gallery/pattimandram',       listTag: 'sigaram_pattimandram' },
+    { key: 'motivational-speech', label: '💬 Motivational Speech', folder: 'gallery/motivational-speech', listTag: 'sigaram_motivational' },
+    { key: 'memory-lane',         label: '📸 Memory Lane',         folder: 'gallery/memory-lane',         listTag: 'sigaram_memory' },
+    { key: 'abroad-events',       label: '✈️ Abroad Events',       folder: 'gallery/abroad-events',       listTag: 'sigaram_abroad' },
+    { key: 'videos',              label: '🎬 Videos',              folder: 'gallery/videos',              listTag: 'sigaram_videos' }
+  ];
+
+  /** Saved order from /api/gallery-order — public_id[] per category key */
+  let galleryOrdersState = { orders: {} };
+
+  let activeCategory = CATEGORIES[0];
+  let filesToUpload = [];
+
+  function escAttr(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  }
+
+  function escJsStr(s) {
+    return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  }
+
+  function buildNav() {
+    var sidebar = document.getElementById('sidebar');
+    var bottom = document.getElementById('bottom-tabs');
+    var tabIcons = ['🎤', '💬', '📸', '✈️', '🎬'];
+    var tabShort = ['Pattimandram', 'Speech', 'Memory', 'Abroad', 'Videos'];
+    sidebar.innerHTML = CATEGORIES.map(function (cat, i) {
+      return '<button type="button" class="sidebar-btn' + (i === 0 ? ' active' : '') + '" data-key="' + escAttr(cat.key) + '" onclick="window.__adminSelectCat(\'' + escJsStr(cat.key) + '\')">' + cat.label + '</button>';
+    }).join('');
+    bottom.innerHTML = CATEGORIES.map(function (cat, i) {
+      return '<button type="button" class="tab-btn' + (i === 0 ? ' active' : '') + '" data-key="' + escAttr(cat.key) + '" onclick="window.__adminSelectCat(\'' + escJsStr(cat.key) + '\')"><span class="tab-icon">' + tabIcons[i] + '</span><span>' + escAttr(tabShort[i]) + '</span></button>';
+    }).join('');
+  }
+
+  window.__adminSelectCat = function (key) {
+    var cat = CATEGORIES.find(function (c) { return c.key === key; });
+    if (cat) loadCategory(cat);
+  };
+
+  function checkLocalApiRoutes() {
+    var banner = document.getElementById('api-missing-banner');
+    if (!banner) return;
+    fetch('/api/list-by-folder?prefix=' + encodeURIComponent('gallery/pattimandram'), { cache: 'no-store' })
+      .then(function (r) {
+        if (r.status === 404) {
+          banner.style.display = 'flex';
+        }
+      })
+      .catch(function () {
+        banner.style.display = 'flex';
+      });
+  }
+
+  function login() {
+    var input = document.getElementById('password-input').value;
+    if (input === ADMIN_PASSWORD) {
+      sessionStorage.setItem('admin_auth', 'true');
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      buildNav();
+      loadCategory(CATEGORIES[0]);
+      loadStats();
+      checkLocalApiRoutes();
+    } else {
+      var card = document.getElementById('login-card');
+      card.classList.add('shake');
+      document.getElementById('login-error').textContent = '❌ Incorrect password. Try again.';
+      setTimeout(function () { card.classList.remove('shake'); }, 600);
+    }
+  }
+
+  function logout() {
+    sessionStorage.removeItem('admin_auth');
+    location.reload();
+  }
+
+  window.login = login;
+  window.logout = logout;
+
+  window.addEventListener('load', function () {
+    if (sessionStorage.getItem('admin_auth') === 'true') {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      buildNav();
+      loadCategory(CATEGORIES[0]);
+      loadStats();
+      checkLocalApiRoutes();
+    }
+  });
+
+  document.getElementById('password-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') login();
+  });
+
+  var pwdInput = document.getElementById('password-input');
+  var eyeBtn = document.getElementById('eye-btn');
+  eyeBtn.addEventListener('click', function () {
+    if (pwdInput.type === 'password') {
+      pwdInput.type = 'text';
+      eyeBtn.textContent = '🙈';
+      eyeBtn.setAttribute('aria-label', 'Hide password');
+    } else {
+      pwdInput.type = 'password';
+      eyeBtn.textContent = '👁️';
+      eyeBtn.setAttribute('aria-label', 'Show password');
+    }
+  });
+
+  function loadCategory(cat) {
+    activeCategory = cat;
+
+    document.querySelectorAll('.sidebar-btn, .tab-btn').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.key === cat.key);
+    });
+
+    document.getElementById('category-heading').textContent = cat.label;
+
+    filesToUpload = [];
+    document.getElementById('file-queue').style.display = 'none';
+    document.getElementById('upload-btn').style.display = 'none';
+    document.getElementById('file-input').value = '';
+
+    loadImages(cat);
+  }
+
+  window.loadCategory = loadCategory;
+
+  async function fetchTagResources(cat) {
+    var listUrl =
+      'https://res.cloudinary.com/' + CLOUD_NAME + '/image/list/' + encodeURIComponent(cat.listTag) + '.json';
+    var res = await fetch(listUrl, { mode: 'cors', cache: 'no-store' });
+    if (res.status === 404) {
+      return [];
+    }
+    if (!res.ok) {
+      var errBody = await res.text();
+      throw new Error('HTTP ' + res.status + ' — ' + (errBody ? errBody.slice(0, 280) : 'no body'));
+    }
+    var data;
+    try {
+      data = await res.json();
+    } catch (parseErr) {
+      throw new Error('Invalid JSON from Cloudinary (got HTML or error page?)');
+    }
+    return data.resources || [];
+  }
+
+  async function fetchFolderResources(cat) {
+    try {
+      var r = await fetch('/api/list-by-folder?prefix=' + encodeURIComponent(cat.folder), {
+        cache: 'no-store',
+      });
+      if (r.status === 503) {
+        return { resources: [], notConfigured: true };
+      }
+      if (!r.ok) {
+        return { resources: [], httpError: r.status };
+      }
+      var data = await r.json();
+      return { resources: data.resources || [] };
+    } catch (e) {
+      return { resources: [], networkError: true };
+    }
+  }
+
+  async function refreshGalleryOrders() {
+    try {
+      var r = await fetch('/api/gallery-order', { cache: 'no-store' });
+      if (r.ok) {
+        var d = await r.json();
+        galleryOrdersState.orders = d.orders && typeof d.orders === 'object' ? d.orders : {};
+      }
+    } catch (e) {
+      galleryOrdersState.orders = galleryOrdersState.orders || {};
+    }
+  }
+
+  function applyGalleryOrder(resources, catKey) {
+    var ids = galleryOrdersState.orders && galleryOrdersState.orders[catKey];
+    if (!ids || !ids.length) return resources;
+    var map = {};
+    resources.forEach(function (r) {
+      map[r.public_id] = r;
+    });
+    var out = [];
+    var seen = {};
+    ids.forEach(function (id) {
+      if (map[id]) {
+        out.push(map[id]);
+        seen[id] = true;
+      }
+    });
+    resources.forEach(function (r) {
+      if (!seen[r.public_id]) out.push(r);
+    });
+    return out;
+  }
+
+  function bindReorderDnD(grid) {
+    var wrap = grid.querySelector('.image-grid-cards');
+    if (!wrap) return;
+
+    var draggedCard = null;
+
+    wrap.querySelectorAll('.drag-handle').forEach(function (handle) {
+      handle.addEventListener('dragstart', function (e) {
+        draggedCard = handle.closest('.image-card');
+        if (!draggedCard) return;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', draggedCard.getAttribute('data-id') || '');
+        draggedCard.classList.add('is-dragging');
+      });
+      handle.addEventListener('dragend', function () {
+        if (draggedCard) draggedCard.classList.remove('is-dragging');
+        draggedCard = null;
+      });
+    });
+
+    wrap.querySelectorAll('.image-card').forEach(function (card) {
+      card.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+      });
+      card.addEventListener('drop', function (e) {
+        e.preventDefault();
+        var from = draggedCard;
+        if (!from || from === card) return;
+        var rect = card.getBoundingClientRect();
+        var before = e.clientY < rect.top + rect.height / 2;
+        if (before) wrap.insertBefore(from, card);
+        else wrap.insertBefore(from, card.nextSibling);
+      });
+    });
+  }
+
+  async function savePhotoOrder(catKey) {
+    var wrap = document.querySelector('#image-grid .image-grid-cards');
+    if (!wrap) return;
+    var ids = Array.prototype.map
+      .call(wrap.querySelectorAll('.image-card'), function (c) {
+        return c.getAttribute('data-id');
+      })
+      .filter(Boolean);
+
+    await refreshGalleryOrders();
+    if (!galleryOrdersState.orders) galleryOrdersState.orders = {};
+    galleryOrdersState.orders[catKey] = ids;
+
+    var btn = document.getElementById('save-order-btn');
+    if (btn) btn.disabled = true;
+    try {
+      var res = await fetch('/api/gallery-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orders: galleryOrdersState.orders }),
+        cache: 'no-store',
+      });
+      var data = {};
+      try {
+        data = await res.json();
+      } catch (e2) {}
+      if (res.ok) {
+        showToast('✅ Photo order saved for main site.', 'success');
+        return;
+      }
+      if (res.status === 404) {
+        var b = document.getElementById('api-missing-banner');
+        if (b) b.style.display = 'flex';
+        showToast('No /api on this origin — use dev-server or Vercel.', 'error');
+        return;
+      }
+      showToast('Save failed: ' + (data.error || res.statusText || 'Unknown'), 'error');
+    } catch (err) {
+      showToast('Save failed: ' + (err && err.message ? err.message : 'network error'), 'error');
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  function bindImageGridActions(grid) {
+    grid.querySelectorAll('button[data-action="copy"]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        copyURL(btn.getAttribute('data-url'));
+      });
+    });
+    grid.querySelectorAll('button[data-action="delete"]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        deleteImage(btn.getAttribute('data-public-id'));
+      });
+    });
+  }
+
+  function renderImageCards(resources) {
+    return resources
+      .map(function (r) {
+        var url = 'https://res.cloudinary.com/' + CLOUD_NAME + '/image/upload/q_auto,f_auto,w_600/' + r.public_id;
+        var fullUrl = 'https://res.cloudinary.com/' + CLOUD_NAME + '/image/upload/' + r.public_id;
+        var filename = r.public_id.split('/').pop();
+        return (
+          '<div class="image-card" data-id="' + escAttr(r.public_id) + '">' +
+          '<img src="' + escAttr(url) + '" alt="' + escAttr(filename) + '" loading="lazy" draggable="false" />' +
+          '<div class="image-overlay">' +
+          '<span class="image-filename">' + escAttr(filename) + '</span>' +
+          '<div class="image-actions">' +
+          '<button type="button" class="btn-small btn-copy" draggable="false" data-action="copy" data-url="' + escAttr(fullUrl) + '">📋 Copy</button>' +
+          '<button type="button" class="btn-small btn-delete" draggable="false" data-action="delete" data-public-id="' + escAttr(r.public_id) + '">🗑️ Delete</button>' +
+          '</div></div>' +
+          '<div class="drag-handle" draggable="true" title="Drag to reorder photos" aria-label="Drag to reorder">⠿</div></div>'
+        );
+      })
+      .join('');
+  }
+
+  async function loadImages(cat) {
+    var grid = document.getElementById('image-grid');
+    var saveRowTop = document.getElementById('order-save-row');
+    if (saveRowTop) saveRowTop.classList.remove('is-visible');
+    grid.innerHTML = '<div class="loading-spinner">⏳ Loading images...</div>';
+
+    if (!CLOUD_NAME) {
+      grid.innerHTML =
+        '<div class="empty-state error">' +
+        '<p>⚠️ Cloudinary cloud name is missing.</p>' +
+        '<p style="font-size:13px;color:#F87171;line-height:1.5;">' +
+        '<strong>Local:</strong> Set <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;">VITE_CLOUDINARY_CLOUD_NAME</code> in <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;">.env</code>, run <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;">./build.sh</code>, reload (serves <code style="background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;">config.js</code>). ' +
+        '<strong>Vercel:</strong> set env vars and redeploy so the build generates config.</p>' +
+        '</div>';
+      return;
+    }
+
+    try {
+      await refreshGalleryOrders();
+      var resources = await fetchTagResources(cat);
+      var viaFolder = false;
+      if (resources.length === 0) {
+        var folderResult = await fetchFolderResources(cat);
+        resources = folderResult.resources;
+        if (resources.length > 0) {
+          viaFolder = true;
+        }
+      }
+
+      resources = applyGalleryOrder(resources, cat.key);
+
+      if (resources.length === 0) {
+        grid.innerHTML =
+          '<div class="empty-state">' +
+          '<p>📷 No images yet in <strong>' + escAttr(cat.label) + '</strong></p>' +
+          '<p style="color:#A89BC2;font-size:14px;line-height:1.55;max-width:520px;margin:10px auto 0;">Upload here (tag <code style="background:rgba(0,0,0,.25);padding:2px 6px;border-radius:4px;">' +
+          escAttr(cat.listTag) +
+          '</code>) or in Cloudinary add that tag to assets in <code style="background:rgba(0,0,0,.25);padding:2px 6px;border-radius:4px;">' +
+          escAttr(cat.folder) +
+          '</code>. Folder-only images do not show in the unsigned tag list until tagged.</p>' +
+          '<p style="color:#A89BC2;font-size:13px;margin-top:12px;line-height:1.5;">On <strong>Vercel</strong>, add <code style="background:rgba(0,0,0,.25);padding:2px 6px;border-radius:4px;">CLOUDINARY_API_KEY</code> + <code style="background:rgba(0,0,0,.25);padding:2px 6px;border-radius:4px;">CLOUDINARY_API_SECRET</code> (and <code style="background:rgba(0,0,0,.25);padding:2px 6px;border-radius:4px;">CLOUDINARY_CLOUD_NAME</code> if needed) so this admin can list by folder when tags are missing.</p>' +
+          '</div>';
+        return;
+      }
+
+      var saveRow = document.getElementById('order-save-row');
+      if (saveRow) saveRow.classList.add('is-visible');
+
+      var notice = '';
+      if (viaFolder) {
+        notice =
+          '<div style="grid-column:1/-1;background:rgba(120,53,15,.4);color:#FEF3C7;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.5;margin-bottom:8px;text-align:left;">' +
+          '<strong>Folder fallback:</strong> Showing assets under <code style="background:rgba(0,0,0,.25);padding:2px 6px;border-radius:4px;">' +
+          escAttr(cat.folder) +
+          '</code>. Add tag <code style="background:rgba(0,0,0,.25);padding:2px 6px;border-radius:4px;">' +
+          escAttr(cat.listTag) +
+          '</code> in Cloudinary so tag-based URLs (e.g. main site) match this section.</div>';
+      }
+
+      grid.innerHTML = notice + '<div class="image-grid-cards">' + renderImageCards(resources) + '</div>';
+      bindImageGridActions(grid);
+      bindReorderDnD(grid);
+    } catch (err) {
+      var detail = err && err.message ? escAttr(err.message) : 'Unknown error';
+      grid.innerHTML =
+        '<div class="empty-state error">' +
+        '<p>⚠️ Could not load images from Cloudinary.</p>' +
+        '<p style="font-size:12px;color:#FBBF24;margin:10px 0 0;word-break:break-word;"><strong>Details:</strong> ' +
+        detail +
+        '</p>' +
+        '<p style="font-size:13px;color:#F87171;line-height:1.55;text-align:left;max-width:560px;margin:12px auto 0;">' +
+        '• <strong>Cloud name</strong> in <code style="background:rgba(0,0,0,.25);padding:2px 5px;border-radius:4px;">.env</code> → run <code style="background:rgba(0,0,0,.25);padding:2px 5px;border-radius:4px;">./build.sh</code> → hard-refresh.<br>' +
+        '• Security → <strong>Resource list</strong> must be <strong>unchecked</strong> under Restricted image types (so list URLs are allowed).<br>' +
+        '• Open this URL in a new tab — if it fails, Cloudinary is still blocking: <code style="background:rgba(0,0,0,.25);padding:2px 5px;border-radius:4px;font-size:11px;">https://res.cloudinary.com/' +
+        escAttr(CLOUD_NAME) +
+        '/image/list/sigaram_pattimandram.json</code><br>' +
+        '• Listing is by <strong>tag</strong>; uploads must include tags (preset may need to allow tags).</p>' +
+        '</div>';
+    }
+  }
+
+  var uploadZone = document.getElementById('upload-zone');
+  var fileInput = document.getElementById('file-input');
+
+  uploadZone.addEventListener('click', function () { fileInput.click(); });
+  uploadZone.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    uploadZone.classList.add('dragover');
+  });
+  uploadZone.addEventListener('dragleave', function () {
+    uploadZone.classList.remove('dragover');
+  });
+  uploadZone.addEventListener('drop', function (e) {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+    handleFiles(Array.prototype.slice.call(e.dataTransfer.files));
+  });
+  fileInput.addEventListener('change', function () {
+    handleFiles(Array.prototype.slice.call(fileInput.files));
+  });
+
+  function handleFiles(files) {
+    var valid = files.filter(function (f) { return f.type.startsWith('image/') && f.size <= 10 * 1024 * 1024; });
+    var invalid = files.length - valid.length;
+    if (invalid > 0) showToast('⚠️ ' + invalid + ' file(s) skipped (not image or >10MB)', 'warning');
+    if (valid.length === 0) return;
+
+    filesToUpload = valid;
+    renderFileQueue();
+  }
+
+  function renderFileQueue() {
+    var queue = document.getElementById('file-queue');
+    var btn = document.getElementById('upload-btn');
+
+    if (filesToUpload.length === 0) {
+      queue.style.display = 'none';
+      btn.style.display = 'none';
+      return;
+    }
+
+    queue.style.display = 'flex';
+    btn.style.display = 'block';
+    btn.textContent = '⬆️ Upload All (' + filesToUpload.length + ')';
+
+    queue.innerHTML = filesToUpload.map(function (f, i) {
+      var url = URL.createObjectURL(f);
+      var size = (f.size / 1024 / 1024).toFixed(2);
+      return (
+        '<div class="queue-item" id="queue-' + i + '">' +
+        '<img src="' + escAttr(url) + '" alt="preview" />' +
+        '<div class="queue-info">' +
+        '<span class="queue-name">' + escAttr(f.name) + '</span>' +
+        '<span class="queue-size">' + size + ' MB</span>' +
+        '<div class="progress-bar"><div class="progress-fill" id="prog-' + i + '" style="width:0%"></div></div>' +
+        '<span class="queue-status" id="status-' + i + '">Ready</span>' +
+        '</div>' +
+        '<button type="button" class="queue-remove" data-idx="' + i + '" aria-label="Remove">✕</button>' +
+        '</div>'
+      );
+    }).join('');
+
+    queue.querySelectorAll('.queue-remove').forEach(function (b) {
+      b.addEventListener('click', function () {
+        removeFromQueue(parseInt(b.getAttribute('data-idx'), 10));
+      });
+    });
+  }
+
+  function removeFromQueue(i) {
+    filesToUpload.splice(i, 1);
+    renderFileQueue();
+  }
+
+  window.removeFromQueue = removeFromQueue;
+
+  document.getElementById('upload-btn').addEventListener('click', uploadAll);
+
+  async function uploadAll() {
+    var btn = document.getElementById('upload-btn');
+    btn.disabled = true;
+
+    var uploaded = 0;
+    for (var i = 0; i < filesToUpload.length; i++) {
+      var st = document.getElementById('status-' + i);
+      if (st) st.textContent = 'Uploading...';
+      try {
+        await uploadFile(filesToUpload[i], i);
+        if (st) st.textContent = '✅ Done';
+        uploaded++;
+      } catch (e) {
+        if (st) st.textContent = '❌ Failed';
+      }
+    }
+
+    showToast('✅ ' + uploaded + ' of ' + filesToUpload.length + ' images uploaded!', 'success');
+    btn.disabled = false;
+    filesToUpload = [];
+
+    setTimeout(function () {
+      document.getElementById('file-queue').style.display = 'none';
+      document.getElementById('upload-btn').style.display = 'none';
+      loadImages(activeCategory);
+      loadStats();
+    }, 1500);
+  }
+
+  function uploadFile(file, index) {
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', UPLOAD_PRESET);
+    formData.append('folder', activeCategory.folder);
+    formData.append('tags', activeCategory.listTag);
+
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/image/upload');
+
+      xhr.upload.onprogress = function (e) {
+        if (e.lengthComputable) {
+          var pct = Math.round((e.loaded / e.total) * 100);
+          var prog = document.getElementById('prog-' + index);
+          if (prog) prog.style.width = pct + '%';
+        }
+      };
+
+      xhr.onload = function () {
+        try {
+          var data = JSON.parse(xhr.responseText);
+          if (xhr.status === 200) resolve(data);
+          else reject(new Error((data.error && data.error.message) || 'Upload failed'));
+        } catch (err) {
+          reject(err);
+        }
+      };
+
+      xhr.onerror = function () { reject(new Error('Network error')); };
+      xhr.send(formData);
+    });
+  }
+
+  function copyURL(url) {
+    navigator.clipboard.writeText(url).then(function () {
+      showToast('📋 URL copied!', 'success');
+    }).catch(function () {
+      showToast('Could not copy — copy manually.', 'warning');
+    });
+  }
+
+  window.copyURL = copyURL;
+
+  async function deleteImage(publicId) {
+    if (!confirm('Delete this image from Cloudinary? This cannot be undone.')) return;
+    try {
+      var res = await fetch('/api/delete-resource', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ public_id: publicId }),
+        cache: 'no-store',
+      });
+      var data = {};
+      try {
+        data = await res.json();
+      } catch (e) {}
+      if (res.ok) {
+        showToast('🗑️ Image deleted.', 'success');
+        loadImages(activeCategory);
+        loadStats();
+        return;
+      }
+      if (res.status === 404) {
+        var b = document.getElementById('api-missing-banner');
+        if (b) b.style.display = 'flex';
+        showToast(
+          'No /api on this origin. Use the Admin URL from your terminal (port may not be 5173) or deploy to Vercel.',
+          'error'
+        );
+        return;
+      }
+      if (res.status === 503 && data.missing) {
+        showToast(
+          'Delete needs server API keys. Set CLOUDINARY_API_KEY + CLOUDINARY_API_SECRET (Vercel or local dev-server + .env).',
+          'warning'
+        );
+        return;
+      }
+      var errMsg = typeof data.error === 'string' ? data.error : (data.error && data.error.message) || '';
+      showToast('Delete failed: ' + (errMsg || res.statusText || 'Unknown'), 'error');
+    } catch (err) {
+      showToast('Delete failed: ' + (err && err.message ? err.message : 'network error'), 'error');
+    }
+  }
+
+  window.deleteImage = deleteImage;
+
+  function showToast(msg, type) {
+    type = type || 'success';
+    var toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.className = 'toast toast-' + type;
+    toast.style.display = 'block';
+    setTimeout(function () { toast.style.display = 'none'; }, 4000);
+  }
+
+  window.showToast = showToast;
+
+  async function countCategoryImages(cat) {
+    try {
+      var res = await fetch(
+        'https://res.cloudinary.com/' + CLOUD_NAME + '/image/list/' + encodeURIComponent(cat.listTag) + '.json',
+        { mode: 'cors', cache: 'no-store' }
+      );
+      if (res.ok) {
+        var data = await res.json();
+        var n = (data.resources || []).length;
+        if (n > 0) return n;
+      }
+    } catch (e) {}
+    try {
+      var fr = await fetch('/api/list-by-folder?prefix=' + encodeURIComponent(cat.folder), {
+        cache: 'no-store',
+      });
+      if (fr.ok) {
+        var fd = await fr.json();
+        return (fd.resources || []).length;
+      }
+    } catch (e) {}
+    return 0;
+  }
+
+  async function loadStats() {
+    var totals = { total: 0 };
+    if (!CLOUD_NAME) {
+      document.getElementById('stat-total').textContent = '0';
+      document.getElementById('stat-pattimandram').textContent = '0';
+      document.getElementById('stat-speech').textContent = '0';
+      document.getElementById('stat-abroad').textContent = '0';
+      return;
+    }
+    for (var i = 0; i < CATEGORIES.length; i++) {
+      var cat = CATEGORIES[i];
+      var count = await countCategoryImages(cat);
+      totals[cat.key] = count;
+      totals.total += count;
+    }
+    document.getElementById('stat-total').textContent = totals.total;
+    document.getElementById('stat-pattimandram').textContent = totals['pattimandram'] || 0;
+    document.getElementById('stat-speech').textContent = totals['motivational-speech'] || 0;
+    document.getElementById('stat-abroad').textContent = totals['abroad-events'] || 0;
+  }
+
+  window.loadStats = loadStats;
+
+  document.getElementById('save-order-btn').addEventListener('click', function () {
+    savePhotoOrder(activeCategory.key);
+  });
+})();
+  </script>
+</body>
+</html>

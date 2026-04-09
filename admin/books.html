@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Books — Sigaram Admin</title>
+  <script src="/config.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0F0A1E; color: #F0EBFF; }
+    #login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1A0A2E 0%, #6B21A8 100%); }
+    #login-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 24px; padding: 48px 40px; max-width: 400px; width: 100%; text-align: center; }
+    #login-card img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #D4AF37; margin-bottom: 16px; }
+    #login-card h1 { color: #D4AF37; font-size: 1.5rem; margin-bottom: 8px; }
+    #login-card p { color: #A89BC2; font-size: 0.9rem; margin-bottom: 24px; }
+    .password-wrap { position: relative; margin-bottom: 12px; }
+    .password-wrap input { width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; color: #F0EBFF; font-size: 1rem; }
+    #login-error { color: #F87171; font-size: 0.85rem; min-height: 20px; margin-bottom: 12px; }
+    .btn-login { width: 100%; padding: 14px; background: linear-gradient(135deg, #D4AF37, #B8960C); color: #1A0A2E; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; font-size: 1rem; }
+    .topbar { background: #1A0A2E; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #2E2050; position: sticky; top: 0; z-index: 10; }
+    .topbar a, .topbar button { padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; text-decoration: none; cursor: pointer; border: 1px solid #6B21A8; color: #A89BC2; background: none; }
+    .topbar a:hover { background: #6B21A8; color: #fff; }
+    .btn-danger { background: #7F1D1D !important; color: #FEE2E2 !important; border-color: #7F1D1D !important; }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 24px; }
+    .info-banner { background: #78350F; color: #FEF3C7; padding: 12px 16px; border-radius: 10px; margin-bottom: 20px; font-size: 0.85rem; line-height: 1.5; }
+    .info-banner code { background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 4px; }
+    h2 { font-size: 1.25rem; margin-bottom: 16px; color: #D4AF37; }
+    .book-card { background: #1E1535; border: 1px solid #2E2050; border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+    .book-card h3 { font-size: 0.9rem; color: #A89BC2; margin-bottom: 12px; }
+    .row { margin-bottom: 12px; }
+    .row label { display: block; font-size: 0.75rem; color: #A89BC2; margin-bottom: 4px; }
+    .row input, .row textarea { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #2E2050; background: rgba(0,0,0,0.2); color: #F0EBFF; font-size: 0.9rem; font-family: inherit; }
+    .row textarea { min-height: 72px; resize: vertical; }
+    .cover-row { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+    .cover-preview { width: 100px; height: 140px; object-fit: cover; border-radius: 8px; background: #2E2050; }
+    .btn-sm { padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+    .btn-upload { background: #6B21A8; color: #fff; }
+    .btn-remove { background: #7F1D1D; color: #FEE2E2; margin-top: 8px; }
+    .actions-bar { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0; }
+    .btn-gold { padding: 14px 24px; background: linear-gradient(135deg, #D4AF37, #B8960C); color: #1A0A2E; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; font-size: 1rem; }
+    .btn-outline { padding: 14px 24px; border: 1px solid #6B21A8; color: #A89BC2; background: none; border-radius: 12px; cursor: pointer; font-size: 0.95rem; }
+    .toast { position: fixed; bottom: 24px; right: 24px; padding: 14px 20px; border-radius: 12px; font-weight: 600; z-index: 9999; max-width: 360px; display: none; }
+    .toast-success { background: #065F46; color: #D1FAE5; }
+    .toast-error { background: #7F1D1D; color: #FEE2E2; }
+    input[type="file"] { display: none; }
+  </style>
+</head>
+<body>
+  <div id="login-screen">
+    <div id="login-card">
+      <img src="../logo.png" alt="" />
+      <h1>Books admin</h1>
+      <p>Same password as gallery admin</p>
+      <div class="password-wrap">
+        <input type="password" id="password-input" placeholder="Password" autocomplete="current-password" />
+      </div>
+      <div id="login-error"></div>
+      <button type="button" class="btn-login" onclick="login()">Sign in</button>
+    </div>
+  </div>
+
+  <div id="dashboard" style="display:none;">
+    <div class="topbar">
+      <strong style="color:#D4AF37;">📚 Publications</strong>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a href="index.html">Gallery admin</a>
+        <a href="../index.html#publications" target="_blank">View site</a>
+        <button type="button" class="btn-danger" onclick="logout()">Logout</button>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="info-banner">
+        <strong>How it works:</strong> Edit titles (Tamil), author line, short English description, and <strong>Google Drive link</strong> for “View Book”. Upload a cover image (stored in Cloudinary under <code>books/covers</code>). Click <strong>Save all books</strong> — needs <code>npm run dev</code> or Vercel with <code>/api/books</code>. On Vercel, data is also saved as a Cloudinary raw file for the live site.
+      </div>
+      <h2>Your books</h2>
+      <div id="books-root"></div>
+      <div class="actions-bar">
+        <button type="button" class="btn-gold" onclick="addBook()">+ Add book</button>
+        <button type="button" class="btn-gold" onclick="saveAll()">Save all books</button>
+        <button type="button" class="btn-outline" onclick="downloadJson()">Download books.json</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script>
+(function () {
+  'use strict';
+  var CONFIG = window.__SIGARAM_CONFIG__ || {};
+  var CLOUD_NAME = CONFIG.CLOUD_NAME || '';
+  var UPLOAD_PRESET = CONFIG.UPLOAD_PRESET || 'sigaram_gallery';
+  var ADMIN_PASSWORD = CONFIG.ADMIN_PASSWORD || '';
+  var books = { books: [] };
+
+  function showToast(msg, ok) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + (ok ? 'toast-success' : 'toast-error');
+    t.style.display = 'block';
+    setTimeout(function () { t.style.display = 'none'; }, 4500);
+  }
+
+  function login() {
+    if (document.getElementById('password-input').value !== ADMIN_PASSWORD) {
+      document.getElementById('login-error').textContent = 'Wrong password';
+      return;
+    }
+    sessionStorage.setItem('admin_auth', 'true');
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadBooks();
+  }
+
+  function logout() {
+    sessionStorage.removeItem('admin_auth');
+    location.reload();
+  }
+
+  window.login = login;
+  window.logout = logout;
+
+  if (sessionStorage.getItem('admin_auth') === 'true') {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadBooks();
+  }
+
+  async function loadBooks() {
+    var data = null;
+    try {
+      var r = await fetch('/api/books', { cache: 'no-store' });
+      if (r.ok) data = await r.json();
+    } catch (e) {}
+    if (!data || !data.books) {
+      try {
+        var r2 = await fetch('/books.json', { cache: 'no-store' });
+        if (r2.ok) data = await r2.json();
+      } catch (e2) {}
+    }
+    books = data && data.books ? data : { books: [] };
+    if (!books.books.length) {
+      books.books = [{
+        id: 'book-' + Date.now(),
+        titleTa: '',
+        authorTa: 'முனைவர் S.D. கலையமுதன் M.A., M.L., PhD.,',
+        descriptionEn: '',
+        coverUrl: '',
+        driveUrl: 'https://drive.google.com'
+      }];
+    }
+    render();
+  }
+
+  function coverSrc(url) {
+    if (!url) return '';
+    if (/^https?:\/\//i.test(url)) return url;
+    return url.indexOf('/') === 0 ? url : '/' + url;
+  }
+
+  function render() {
+    var root = document.getElementById('books-root');
+    root.innerHTML = books.books.map(function (b, i) {
+      return (
+        '<div class="book-card" data-idx="' + i + '">' +
+        '<h3>Book ' + (i + 1) + '</h3>' +
+        '<div class="cover-row">' +
+        '<img class="cover-preview" src="' + (coverSrc(b.coverUrl) || 'data:image/gif;base64,R0lGODlhAQABAAAAACw=') + '" alt="" id="cov-' + i + '" />' +
+        '<div><button type="button" class="btn-sm btn-upload" onclick="pickCover(' + i + ')">Upload cover</button>' +
+        '<input type="file" id="file-' + i + '" accept="image/*" onchange="onCoverFile(' + i + ',this)" />' +
+        '<button type="button" class="btn-sm btn-remove" onclick="removeBook(' + i + ')">Remove book</button></div></div>' +
+        '<div class="row"><label>Id (slug, Latin)</label><input type="text" data-f="id" data-i="' + i + '" value="' + esc(b.id) + '" /></div>' +
+        '<div class="row"><label>Title (Tamil)</label><input type="text" data-f="titleTa" data-i="' + i + '" value="' + esc(b.titleTa) + '" /></div>' +
+        '<div class="row"><label>Author line (Tamil)</label><input type="text" data-f="authorTa" data-i="' + i + '" value="' + esc(b.authorTa) + '" /></div>' +
+        '<div class="row"><label>Description (English)</label><textarea data-f="descriptionEn" data-i="' + i + '">' + esc(b.descriptionEn) + '</textarea></div>' +
+        '<div class="row"><label>Cover URL (set by upload or paste Cloudinary URL)</label><input type="text" data-f="coverUrl" data-i="' + i + '" value="' + esc(b.coverUrl) + '" /></div>' +
+        '<div class="row"><label>Drive / view link (https://…)</label><input type="text" data-f="driveUrl" data-i="' + i + '" value="' + esc(b.driveUrl) + '" /></div>' +
+        '</div>'
+      );
+    }).join('');
+
+    root.querySelectorAll('input[data-f], textarea[data-f]').forEach(function (el) {
+      el.addEventListener('input', function () {
+        var i = parseInt(el.getAttribute('data-i'), 10);
+        var f = el.getAttribute('data-f');
+        books.books[i][f] = el.value;
+        if (f === 'coverUrl') {
+          var img = document.getElementById('cov-' + i);
+          if (img && el.value) img.src = coverSrc(el.value);
+        }
+      });
+    });
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  }
+
+  window.addBook = function () {
+    books.books.push({
+      id: 'book-' + Date.now(),
+      titleTa: '',
+      authorTa: 'முனைவர் S.D. கலையமுதன் M.A., M.L., PhD.,',
+      descriptionEn: '',
+      coverUrl: '',
+      driveUrl: 'https://'
+    });
+    render();
+  };
+
+  window.removeBook = function (i) {
+    if (!confirm('Remove this book from the list?')) return;
+    books.books.splice(i, 1);
+    if (!books.books.length) {
+      books.books.push({
+        id: 'book-' + Date.now(),
+        titleTa: '',
+        authorTa: 'முனைவர் S.D. கலையமுதன் M.A., M.L., PhD.,',
+        descriptionEn: '',
+        coverUrl: '',
+        driveUrl: 'https://'
+      });
+    }
+    render();
+  };
+
+  window.pickCover = function (i) {
+    document.getElementById('file-' + i).click();
+  };
+
+  window.onCoverFile = function (idx, input) {
+    var f = input.files && input.files[0];
+    if (!f || !CLOUD_NAME) {
+      showToast('Missing file or cloud name in config', false);
+      return;
+    }
+    var fd = new FormData();
+    fd.append('file', f);
+    fd.append('upload_preset', UPLOAD_PRESET);
+    fd.append('folder', 'books/covers');
+    fd.append('tags', 'sigaram_book_cover');
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/image/upload');
+    xhr.onload = function () {
+      try {
+        var d = JSON.parse(xhr.responseText);
+        if (xhr.status === 200 && d.secure_url) {
+          books.books[idx].coverUrl = d.secure_url;
+          document.querySelector('input[data-f=coverUrl][data-i="' + idx + '"]').value = d.secure_url;
+          document.getElementById('cov-' + idx).src = d.secure_url;
+          showToast('Cover uploaded', true);
+        } else throw new Error((d.error && d.error.message) || 'Upload failed');
+      } catch (e) {
+        showToast(e.message || 'Upload failed', false);
+      }
+    };
+    xhr.onerror = function () { showToast('Network error', false); };
+    xhr.send(fd);
+    input.value = '';
+  };
+
+  window.saveAll = async function () {
+    var payload = { books: books.books.map(function (b) {
+      return {
+        id: String(b.id || '').trim() || ('book-' + Date.now()),
+        titleTa: String(b.titleTa || ''),
+        authorTa: String(b.authorTa || ''),
+        descriptionEn: String(b.descriptionEn || ''),
+        coverUrl: String(b.coverUrl || ''),
+        driveUrl: String(b.driveUrl || '').trim() || 'https://'
+      };
+    })};
+    try {
+      var r = await fetch('/api/books', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        cache: 'no-store'
+      });
+      var d = await r.json().catch(function () { return {}; });
+      if (r.ok) {
+        showToast('Saved. ' + (d.cloudinary ? 'Cloud: ' + d.cloudinary : ''), true);
+      } else {
+        showToast(d.error || 'Save failed (use dev-server or Vercel with /api)', false);
+      }
+    } catch (e) {
+      showToast('Save failed: ' + (e.message || 'network'), false);
+    }
+  };
+
+  window.downloadJson = function () {
+    var blob = new Blob([JSON.stringify({ books: books.books }, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'books.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showToast('books.json downloaded — commit to git if you use static hosting', true);
+  };
+})();
+  </script>
+</body>
+</html>

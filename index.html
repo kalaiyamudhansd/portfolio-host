@@ -1,18 +1,433 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dr. S. D. Kalaiamudhan</title>
-    <link rel="icon" type="image/png" href="/logo.png">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Dr. S. D. Kalaiamudhan — Advocate, Pattimandram Naduvar, Motivational Speaker, Founder of Sigaram Foundation." />
+  <title>Dr. S. D. Kalaiamudhan | Sigaram Foundation</title>
+  <script src="/config.js"></script>
+  <script>
+    (function () {
+      var theme = localStorage.getItem("theme") || "light";
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <script type="module" crossorigin src="/assets/index-DZK-M38s.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-C5qglTdR.css">
-  </head>
+  <header class="site-header" id="siteHeader">
+    <nav class="navbar" aria-label="Primary">
+      <a href="#home" class="navbar__brand" data-nav="home">
+        <img src="logo.png" alt="" width="40" height="40" class="navbar__logo" />
+        <span class="navbar__title">Sigaram Foundation</span>
+      </a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="#home" data-nav="home">Home</a></li>
+        <li><a href="#about" data-nav="about">About</a></li>
+        <li><a href="#publications" data-nav="publications">Publications</a></li>
+        <li><a href="#gallery" data-nav="gallery">Gallery</a></li>
+        <li><a href="#events" data-nav="events">Events</a></li>
+        <li><a href="#contact" data-nav="contact">Contact</a></li>
+      </ul>
+      <div class="navbar__end">
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to dark theme">
+          <span class="theme-toggle__icon" id="themeIcon" aria-hidden="true">🌙</span>
+          <span class="theme-toggle__label" id="themeLabel">Dark</span>
+        </button>
+        <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">
+          <span class="nav-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="nav-backdrop" id="navBackdrop" hidden></div>
+    </nav>
+  </header>
 
-  <body>
-    <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-  </body>
+  <main id="main-content">
+    <!-- Hero -->
+    <section class="hero" id="home" aria-labelledby="hero-heading">
+      <div class="hero__kolam" aria-hidden="true">
+        <svg class="kolam-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="kolamPattern" width="80" height="80" patternUnits="userSpaceOnUse">
+              <circle cx="40" cy="40" r="2" fill="currentColor" opacity="0.15" />
+              <path d="M40 10 L40 70 M10 40 L70 40 M25 25 L55 55 M55 25 L25 55" stroke="currentColor" stroke-width="0.5" fill="none" opacity="0.12" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#kolamPattern)" />
+        </svg>
+      </div>
+      <div class="hero__inner">
+        <div class="hero__col hero__col--text reveal">
+          <p class="hero__tamil-quote" lang="ta">சிகரங்கள் உயரமல்ல</p>
+          <p class="hero__english-quote"><em>Peaks are not too high</em></p>
+          <hr class="hero__divider" aria-hidden="true" />
+          <h1 id="hero-heading" class="hero__name">Dr. S. D. Kalaiamudhan</h1>
+          <p class="hero__creds">M.A(Tamil)., M.A(Pub, Adm)., M.L., PhD</p>
+          <p class="hero__role">
+            <span class="hero__typewriter" id="typewriter" aria-live="polite"></span>
+            <span class="hero__cursor" aria-hidden="true">|</span>
+          </p>
+          <div class="hero__stats">
+            <div class="stat-badge">
+              <span class="stat-badge__emoji" aria-hidden="true">🎤</span>
+              <span class="stat-badge__text">1000+ Pattimandrams</span>
+            </div>
+            <div class="stat-badge">
+              <span class="stat-badge__emoji" aria-hidden="true">👥</span>
+              <span class="stat-badge__text">5 Lakh+ Students Inspired</span>
+            </div>
+            <div class="stat-badge">
+              <span class="stat-badge__emoji" aria-hidden="true">🌍</span>
+              <span class="stat-badge__text">International Speaker</span>
+            </div>
+          </div>
+          <div class="hero__cta">
+            <a href="#contact" class="btn btn--gold">Book a Session</a>
+            <a href="#about" class="btn btn--outline">Know More</a>
+          </div>
+        </div>
+        <div class="hero__col hero__col--visual reveal">
+          <div class="hero__glow" aria-hidden="true"></div>
+          <img src="images/front.png" alt="Dr. S. D. Kalaiamudhan speaking on stage with a microphone" class="hero__img" width="600" height="700" />
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="section about about-section" id="about" aria-labelledby="about-heading">
+      <div class="container">
+        <h2 id="about-heading" class="section__title reveal">
+          About Me
+          <span class="section__title-line" aria-hidden="true"></span>
+        </h2>
+        <div class="about__grid">
+          <div class="about__photo-wrap reveal">
+            <div class="about__frame">
+              <img src="images/about.png" alt="Formal portrait of Dr. S. D. Kalaiamudhan" class="about__img" width="400" height="480" />
+            </div>
+          </div>
+          <div class="about__text reveal">
+            <p class="about__para">
+              I am an Advocate, Pattimandram Naduvar, Motivational Speaker, Writer, Tamil Literature and Devotional Orator, Founder of Sigaram Foundation. With a strong academic foundation, including a PhD, I have been honored to preside over 1000+ Pattimandram shows across the world. Also met 5 lakh students, professors, and teachers from various colleges across the world and have delivered motivational speeches. My journey has taken me to international Tamil forums, television debates, and educational institutions as a motivational speaker. Passionate about Tamil literature, history, and social causes, I continue to share my insights through speeches, television programs, and community engagements, inspiring and connecting people through the power of words.
+            </p>
+            <div class="about__achievements" aria-label="Highlights">
+              <div class="achieve-card">
+                <span class="achieve-card__icon" aria-hidden="true">🏆</span>
+                <div class="achieve-card__body">
+                  <span class="achieve-card__num">1000+</span>
+                  <span class="achieve-card__lbl">Pattimandram Shows</span>
+                </div>
+              </div>
+              <div class="achieve-card">
+                <span class="achieve-card__icon" aria-hidden="true">🎓</span>
+                <div class="achieve-card__body">
+                  <span class="achieve-card__num">PhD</span>
+                  <span class="achieve-card__lbl">Tamil Literature</span>
+                </div>
+              </div>
+              <div class="achieve-card">
+                <span class="achieve-card__icon" aria-hidden="true">🌍</span>
+                <div class="achieve-card__body">
+                  <span class="achieve-card__num">International</span>
+                  <span class="achieve-card__lbl">Speaker</span>
+                </div>
+              </div>
+              <div class="achieve-card">
+                <span class="achieve-card__icon" aria-hidden="true">✍️</span>
+                <div class="achieve-card__body">
+                  <span class="achieve-card__num">2</span>
+                  <span class="achieve-card__lbl">Published Books</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="timeline__heading reveal">Education</h3>
+        <ol class="timeline">
+          <li class="timeline__item reveal timeline__item--left">
+            <article class="timeline__card">
+              <h4 class="timeline__title">Diploma in Electrical and Electronics Engineering</h4>
+            </article>
+          </li>
+          <li class="timeline__item reveal timeline__item--right">
+            <article class="timeline__card">
+              <h4 class="timeline__title">Bachelor of Laws (LLB)</h4>
+            </article>
+          </li>
+          <li class="timeline__item reveal timeline__item--left">
+            <article class="timeline__card">
+              <h4 class="timeline__title">Master of Arts — Tamil</h4>
+            </article>
+          </li>
+          <li class="timeline__item reveal timeline__item--right">
+            <article class="timeline__card">
+              <h4 class="timeline__title">Master of Arts — Public Administration</h4>
+            </article>
+          </li>
+          <li class="timeline__item reveal timeline__item--left">
+            <article class="timeline__card">
+              <h4 class="timeline__title">Master of Law (LLM)</h4>
+            </article>
+          </li>
+          <li class="timeline__item reveal timeline__item--right">
+            <article class="timeline__card">
+              <h4 class="timeline__title">Doctor of Philosophy — Tamil (PhD)</h4>
+            </article>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Publications -->
+    <section class="section publications publications-section" id="publications" aria-labelledby="pub-heading">
+      <div class="container">
+        <h2 id="pub-heading" class="section__title reveal">
+          My Publications
+          <span class="section__title-line" aria-hidden="true"></span>
+        </h2>
+        <p class="section__subtitle reveal">
+          Showcasing my insights on Tamil literature, history, social issues, and motivation — reflecting my passion for the Tamil language and culture.
+        </p>
+        <div class="pub-grid" id="pub-grid">
+          <p class="section__subtitle" id="pub-loading" style="grid-column: 1/-1;">Loading publications…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="section gallery-section" id="gallery" aria-labelledby="gallery-heading">
+      <div class="gallery-section__kolam" aria-hidden="true"></div>
+      <div class="container">
+        <h2 id="gallery-heading" class="section__title section__title--on-dark reveal">
+          Gallery
+          <span class="section__title-line section__title-line--gold" aria-hidden="true"></span>
+        </h2>
+        <p class="section__subtitle section__subtitle--on-dark reveal">
+          Would you like to explore more moments from my journey? Check out the gallery!
+        </p>
+        <div class="gallery-tabs" role="tablist" aria-label="Gallery categories">
+          <button type="button" class="gallery-tab is-active" role="tab" aria-selected="true" aria-controls="panel-pattimandram" id="tab-pattimandram" data-panel="pattimandram">Pattimandram Shows</button>
+          <button type="button" class="gallery-tab" role="tab" aria-selected="false" aria-controls="panel-motivational" id="tab-motivational" data-panel="motivational">Motivational Speech</button>
+          <button type="button" class="gallery-tab" aria-selected="false" aria-controls="panel-memory" id="tab-memory" data-panel="memory">Memory Lane</button>
+          <button type="button" class="gallery-tab" aria-selected="false" aria-controls="panel-abroad" id="tab-abroad" data-panel="abroad">Abroad Events</button>
+          <button type="button" class="gallery-tab" aria-selected="false" aria-controls="panel-videos" id="tab-videos" data-panel="videos">Videos</button>
+        </div>
+
+        <div class="gallery-panels">
+          <div class="gallery-panel is-active" id="panel-pattimandram" role="tabpanel" aria-labelledby="tab-pattimandram" data-carousel="0"></div>
+          <div class="gallery-panel" id="panel-motivational" role="tabpanel" aria-labelledby="tab-motivational" hidden data-carousel="1"></div>
+          <div class="gallery-panel" id="panel-memory" role="tabpanel" aria-labelledby="tab-memory" hidden data-carousel="2"></div>
+          <div class="gallery-panel" id="panel-abroad" role="tabpanel" aria-labelledby="tab-abroad" hidden data-carousel="3"></div>
+          <div class="gallery-panel" id="panel-videos" role="tabpanel" aria-labelledby="tab-videos" hidden data-carousel="4"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview" hidden>
+      <button type="button" class="lightbox__close" id="lightboxClose" aria-label="Close image">&times;</button>
+      <img src="" alt="" class="lightbox__img" id="lightboxImg" />
+    </div>
+
+    <!-- Events -->
+    <section class="section events events-section" id="events" aria-labelledby="events-heading">
+      <div class="container">
+        <h2 id="events-heading" class="section__title reveal">
+          Upcoming Events
+          <span class="section__title-line section__title-line--purple" aria-hidden="true"></span>
+        </h2>
+        <p class="section__subtitle reveal">
+          Curious about what's happening next? Discover all the exciting upcoming events!
+        </p>
+        <p class="events__hint reveal" aria-hidden="true">Swipe for more</p>
+        <div class="events__wrap">
+          <button type="button" class="events__arrow events__arrow--prev" id="eventsPrev" aria-label="Previous events">&lsaquo;</button>
+          <div class="events__scroller" id="eventsScroller">
+            <article class="event-card event-card--pattimandram reveal" data-event-type="pattimandram">
+              <span class="event-card__badge">Pattimandram</span>
+              <h3 class="event-card__title">Regional Pattimandram — Chennai</h3>
+              <p class="event-card__meta event-card__meta--date">
+                <svg class="event-card__ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg>
+                April 18, 2026
+              </p>
+              <p class="event-card__meta event-card__meta--loc">
+                <svg class="event-card__ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+                Chennai, Tamil Nadu
+              </p>
+              <a href="#contact" class="btn btn--purple btn--small">Register Now</a>
+            </article>
+            <article class="event-card event-card--talk reveal" data-event-type="talk">
+              <span class="event-card__badge event-card__badge--talk">Motivational Talk</span>
+              <h3 class="event-card__title">College Motivation Summit</h3>
+              <p class="event-card__meta event-card__meta--date">
+                <svg class="event-card__ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
+                May 2, 2026
+              </p>
+              <p class="event-card__meta event-card__meta--loc">
+                <svg class="event-card__ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+                Coimbatore, Tamil Nadu
+              </p>
+              <a href="#contact" class="btn btn--purple btn--small">Register Now</a>
+            </article>
+            <article class="event-card event-card--workshop reveal" data-event-type="workshop">
+              <span class="event-card__badge event-card__badge--workshop">Workshop</span>
+              <h3 class="event-card__title">Tamil Literature Workshop</h3>
+              <p class="event-card__meta event-card__meta--date">
+                <svg class="event-card__ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
+                May 20, 2026
+              </p>
+              <p class="event-card__meta event-card__meta--loc">
+                <svg class="event-card__ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+                Salem, Tamil Nadu
+              </p>
+              <a href="#contact" class="btn btn--purple btn--small">Register Now</a>
+            </article>
+            <article class="event-card event-card--pattimandram reveal" data-event-type="pattimandram">
+              <span class="event-card__badge">Pattimandram</span>
+              <h3 class="event-card__title">State-Level Debate Championship</h3>
+              <p class="event-card__meta event-card__meta--date">
+                <svg class="event-card__ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
+                June 7, 2026
+              </p>
+              <p class="event-card__meta event-card__meta--loc">
+                <svg class="event-card__ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+                Madurai, Tamil Nadu
+              </p>
+              <a href="#contact" class="btn btn--purple btn--small">Register Now</a>
+            </article>
+            <article class="event-card event-card--talk reveal" data-event-type="talk">
+              <span class="event-card__badge event-card__badge--talk">Motivational Talk</span>
+              <h3 class="event-card__title">Youth Empowerment Evening</h3>
+              <p class="event-card__meta event-card__meta--date">
+                <svg class="event-card__ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
+                June 28, 2026
+              </p>
+              <p class="event-card__meta event-card__meta--loc">
+                <svg class="event-card__ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+                Bengaluru, Karnataka
+              </p>
+              <a href="#contact" class="btn btn--purple btn--small">Register Now</a>
+            </article>
+          </div>
+          <button type="button" class="events__arrow events__arrow--next" id="eventsNext" aria-label="Next events">&rsaquo;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section contact contact-section" id="contact" aria-labelledby="contact-heading">
+      <div class="container">
+        <h2 id="contact-heading" class="section__title reveal">
+          Get In Touch
+          <span class="section__title-line" aria-hidden="true"></span>
+        </h2>
+        <div class="contact__grid">
+          <div class="contact__info reveal">
+            <div class="info-card contact-info-card">
+              <span class="info-card__icon" aria-hidden="true">&#128231;</span>
+              <div>
+                <h3 class="info-card__label">Email</h3>
+                <a href="mailto:kalaiyamudhansd@gmail.com" class="info-card__value">kalaiyamudhansd@gmail.com</a>
+              </div>
+            </div>
+            <div class="info-card contact-info-card">
+              <span class="info-card__icon" aria-hidden="true">&#128222;</span>
+              <div>
+                <h3 class="info-card__label">Phone</h3>
+                <a href="tel:+919788313129" class="info-card__value">+91 9788313129</a>
+              </div>
+            </div>
+            <div class="info-card contact-info-card">
+              <span class="info-card__icon" aria-hidden="true">&#128205;</span>
+              <div>
+                <h3 class="info-card__label">Location</h3>
+                <p class="info-card__value">Salem, Tamilnadu</p>
+              </div>
+            </div>
+            <div class="social-block">
+              <h3 class="social-block__title">Connect With Me</h3>
+              <div class="social-neuro">
+                <a href="https://twitter.com" class="social-neuro__btn" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+                  <svg class="social-neuro__icon" viewBox="0 0 24 24" aria-hidden="true" width="22" height="22"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="https://facebook.com" class="social-neuro__btn" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                  <svg class="social-neuro__icon" viewBox="0 0 24 24" aria-hidden="true" width="22" height="22"><path fill="currentColor" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+                <a href="https://instagram.com" class="social-neuro__btn" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <svg class="social-neuro__icon" viewBox="0 0 24 24" aria-hidden="true" width="22" height="22"><path fill="currentColor" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+                <a href="https://youtube.com" class="social-neuro__btn" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                  <svg class="social-neuro__icon" viewBox="0 0 24 24" aria-hidden="true" width="22" height="22"><path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 7.07 0 9.552 0 9.552s0 2.481.502 3.365a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 12.034 24 9.552 24 9.552s0-2.481-.502-3.366zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="contact__form-wrap reveal">
+            <form class="contact-form" id="contactForm" action="https://getform.io/f/YOUR_ENDPOINT_HERE" method="POST">
+              <input type="text" name="name" placeholder="Your Name" required autocomplete="name" aria-label="Your name" />
+              <input type="email" name="email" placeholder="Your Email" required autocomplete="email" aria-label="Your email" />
+              <textarea name="message" placeholder="Your Message" rows="5" required aria-label="Your message"></textarea>
+              <button type="submit" class="btn btn--submit">Send Message</button>
+            </form>
+            <p class="form-banner form-banner--success" id="formSuccess" role="status" hidden>✅ Thank you! Your message has been sent successfully.</p>
+            <p class="form-banner form-banner--error" id="formError" role="alert" hidden>❌ Something went wrong. Please try again.</p>
+            <p class="form-notice" id="formNotice" role="alert" hidden>Replace YOUR_ENDPOINT_HERE in the form with your Getform.io endpoint in index.html to enable submissions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer__kolam" aria-hidden="true">
+      <svg class="kolam-svg kolam-svg--footer" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="kolamPatternFooter" width="60" height="60" patternUnits="userSpaceOnUse">
+            <circle cx="30" cy="30" r="1.5" fill="currentColor" opacity="0.08" />
+            <path d="M30 8 L30 52 M8 30 L52 30" stroke="currentColor" stroke-width="0.4" fill="none" opacity="0.06" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#kolamPatternFooter)" />
+      </svg>
+    </div>
+    <div class="container footer__inner">
+      <div class="footer__col footer__col--brand">
+        <img src="logo.png" alt="" width="60" height="60" class="footer__logo" />
+        <p class="footer__brand-name">Sigaram Foundation</p>
+        <p class="footer__tagline" lang="ta">சிகரங்கள் உயரமல்ல</p>
+      </div>
+      <div class="footer__col footer__col--links">
+        <nav aria-label="Footer">
+          <ul class="footer__nav">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#publications">Publications</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer__col footer__col--contact">
+        <p class="footer__contact-line"><span aria-hidden="true">&#128231;</span> <a href="mailto:kalaiyamudhansd@gmail.com">kalaiyamudhansd@gmail.com</a></p>
+        <p class="footer__contact-line"><span aria-hidden="true">&#128222;</span> <a href="tel:+919788313129">+91 9788313129</a></p>
+        <p class="footer__contact-line"><span aria-hidden="true">&#128205;</span> Salem, Tamilnadu</p>
+      </div>
+    </div>
+    <div class="footer__bar footer__bar--bottom">
+      <p class="footer__copy footer__copy--bottom">&copy; 2025 Dr. S. D. Kalaiamudhan | Sigaram Foundation. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <button type="button" class="back-to-top" id="backToTop" aria-label="Back to top" hidden>
+    <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+  </button>
+
+  <script src="script.js" defer></script>
+</body>
 </html>

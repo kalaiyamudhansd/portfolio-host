@@ -1,0 +1,19 @@
+{
+  "name": "sigaram-foundation-site",
+  "private": true,
+  "description": "Static site for Dr. S. D. Kalaiamudhan / Sigaram Foundation",
+  "scripts": {
+    "dev": "node dev-server.cjs",
+    "dev:static": "live-server --port=5173 --open=/index.html",
+    "start": "npm run dev",
+    "dev:vercel": "npx vercel dev"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "live-server": "^1.2.2"
+  }
+}
